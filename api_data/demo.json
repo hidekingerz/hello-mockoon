@@ -1,0 +1,238 @@
+{
+  "uuid": "e50ba3d7-94b5-42f5-820c-6ab7c15b597a",
+  "lastMigration": 19,
+  "name": "Demo API",
+  "endpointPrefix": "",
+  "latency": 0,
+  "port": 3000,
+  "hostname": "0.0.0.0",
+  "routes": [
+    {
+      "uuid": "a2ce579f-428d-464c-9566-a7b3b6baed4e",
+      "documentation": "Generate random body (JSON, text, CSV, etc) with templating",
+      "method": "get",
+      "endpoint": "users",
+      "responses": [
+        {
+          "uuid": "06571625-9d3e-4c20-9ad2-34d8cf53c012",
+          "body": "{\n  \"Templating example\": \"For more information about templating, click the blue 'i' above this editor\",\n  \"users\": [\n    {{# repeat (queryParam 'total' '10') }}\n      {\n        \"userId\": \"{{ faker 'random.number' min=10000 max=100000 }}\",\n        \"firstname\": \"{{ faker 'name.firstName' }}\",\n        \"lastname\": \"{{ faker 'name.lastName' }}\",\n        \"friends\": [\n          {{# repeat (faker 'random.number' 5) }}\n            {\n              \"id\": \"{{ faker 'random.uuid' }}\"\n            }\n          {{/ repeat }}\n        ]\n      },\n    {{/ repeat }}\n  ],\n  \"total\": \"{{queryParam 'total' '10'}}\"\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Creates 10 random users, or the amount specified in the 'total' query param",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        },
+        {
+          "uuid": "81a2a1b9-3f76-4300-beab-b3a5868ddf54",
+          "body": "{\n  \"Templating example\": \"NGNG\",\n  \"Message\": \"Ng Pattern\"\n}",
+          "latency": 0,
+          "statusCode": 401,
+          "label": "",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": true,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "874876de-21ae-4f7c-863a-c5fbcbd32f72",
+      "documentation": "Use multiple responses with rules",
+      "method": "post",
+      "endpoint": "content/:param1",
+      "responses": [
+        {
+          "uuid": "53f90df8-7570-4ef0-af40-7710b9588167",
+          "body": "{\n  \"Rules example\": \"Default response. Served if route param 'param1' is not present.\"\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Default response",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        },
+        {
+          "uuid": "4b432d02-c837-406a-82f1-1ffe7c5af606",
+          "body": "{\n  \"Rules example\": \"Content XYZ. Served if route param 'param1' equals 'xyz'. (See in 'Rules' tab)\"\n}",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Content XYZ",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "param1",
+              "value": "xyz",
+              "operator": "equals"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        },
+        {
+          "uuid": "fcb15534-122d-49c3-baac-93656f02c276",
+          "body": "{\n  \"Rules example\": \"Content not found. Served if route param 'param1' is not equal to 'xyz'. (See in 'Rules' tab)\"\n}\n",
+          "latency": 0,
+          "statusCode": 404,
+          "label": "Content not found",
+          "headers": [],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [
+            {
+              "target": "params",
+              "modifier": "param1",
+              "value": "^(?!.*xyz).*$",
+              "operator": "regex"
+            }
+          ],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "75c263cf-b18a-4510-9335-025360a1ea22",
+      "documentation": "Serve a file dynamically depending on the path param 'pageName'.",
+      "method": "get",
+      "endpoint": "file/:pageName",
+      "responses": [
+        {
+          "uuid": "0fdf7858-b58f-4c8b-b2ab-37d8b76a4fa7",
+          "body": "",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "Templating is also supported in file path",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "text/html"
+            }
+          ],
+          "filePath": "./page{{urlParam 'pageName'}}.html",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "d9b271fe-1f08-43ea-a72a-0c8a60de84c4",
+      "documentation": "Path supports various patterns",
+      "method": "put",
+      "endpoint": "path/with/pattern(s)?/*",
+      "responses": [
+        {
+          "uuid": "d6107ab6-bdd6-4e34-b195-96b19b2f8c18",
+          "body": "The current path will match the following routes: \nhttp://localhost:3000/path/with/pattern/\nhttp://localhost:3000/path/with/patterns/\nhttp://localhost:3000/path/with/patterns/anything-else\n\nLearn more about Mockoon's routing: https://mockoon.com/docs/latest/routing",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    },
+    {
+      "uuid": "7ca08903-d9db-452f-a665-3d1eb13a9563",
+      "documentation": "Can Mockoon forward or record entering requests?",
+      "method": "get",
+      "endpoint": "forward-and-record",
+      "responses": [
+        {
+          "uuid": "bb13deaf-7265-48eb-994c-179d8195bd29",
+          "body": "Mockoon can also act as a proxy and forward all entering requests that are not caught by declared routes. \nYou can activate this option in the environment settings ('cog' icon in the upper right corner). \nTo learn more: https://mockoon.com/docs/latest/proxy-mode\n\nAs always, all entering requests, and responses from the proxied server will be recorded ('clock' icon in the upper right corner).\nTo learn more: https://mockoon.com/docs/latest/requests-logging",
+          "latency": 0,
+          "statusCode": 200,
+          "label": "",
+          "headers": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "filePath": "",
+          "sendFileAsBody": false,
+          "rules": [],
+          "rulesOperator": "OR",
+          "disableTemplating": false,
+          "fallbackTo404": false
+        }
+      ],
+      "enabled": true,
+      "randomResponse": false,
+      "sequentialResponse": false
+    }
+  ],
+  "proxyMode": false,
+  "proxyHost": "",
+  "proxyRemovePrefix": false,
+  "tlsOptions": {
+    "enabled": false,
+    "type": "CERT",
+    "pfxPath": "",
+    "certPath": "",
+    "keyPath": "",
+    "caPath": "",
+    "passphrase": ""
+  },
+  "cors": true,
+  "headers": [
+    {
+      "key": "Content-Type",
+      "value": "application/json"
+    }
+  ],
+  "proxyReqHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ],
+  "proxyResHeaders": [
+    {
+      "key": "",
+      "value": ""
+    }
+  ]
+}
