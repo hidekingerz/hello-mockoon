@@ -1,0 +1,29 @@
+{
+  "name": "hello-mockoon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 0",
+    "start": "mockoon-cli start --data ./api_data/demo.json; mockoon-cli list",
+    "list": "mockoon-cli list",
+    "stop": "mockoon-cli stop 'all'; mockoon-cli list"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hidekingerz/hello-mockoon.git"
+  },
+  "author": "hidekingerz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hidekingerz/hello-mockoon/issues"
+  },
+  "homepage": "https://github.com/hidekingerz/hello-mockoon#readme",
+  "volta": {
+    "node": "16.14.2",
+    "npm": "8.6.0"
+  },
+  "dependencies": {
+    "@mockoon/cli": "^1.6.2"
+  }
+}
